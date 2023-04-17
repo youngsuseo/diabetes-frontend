@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const calenderSection = document.getElementById('calender-section');
     const chatMessages = document.getElementById('chat-messages');
     const infoSubmitButton = document.getElementById('info-submit-button');
+    const calendarButton = document.getElementById('calendar-button');
+    const makeMealsButton = document.getElementById('make-meals-button');
 
     chatForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -22,7 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
             userQuery: userInput.value
         };
 
-        console.log(userInfoWithQuery);
+        message.textContent = `User: ${userInput.value}`;
+        chatMessages.appendChild(message);
 
         fetch('http://127.0.0.1:3000/foods', {
             method: 'POST',
@@ -33,14 +36,24 @@ document.addEventListener('DOMContentLoaded', () => {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log('성공:', data);
+                const successMessage = document.createElement('div');
+                successMessage.className = 'success-message';
+                // I want to show the error message right side of the chat
+                successMessage.style.alignItems = 'right';
+                successMessage.style.color = 'white';
+                successMessage.style.background = '#2e62a7';
+                successMessage.textContent = `System: ${data}`;
+                chatMessages.appendChild(successMessage);
             })
             .catch((error) => {
-                console.error('실패:', error);
+                // I want to show the error message right side of the chat
+                const failMessage = document.createElement('div');
+                failMessage.style.right = '0';
+                failMessage.style.color = 'red';
+                failMessage.textContent = `System: ${error}`;
+                chatMessages.appendChild(failMessage);
             });
 
-        message.textContent = `User: ${userInput.value}`;
-        chatMessages.appendChild(message);
         userInput.value = '';
     });
 
@@ -71,6 +84,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         chatSection.hidden = false;
         userInfoForm.parentElement.hidden = true;
-        calenderSection.hidden = false;
+        calenderSection.hidden = true;
     }
+
+    // 캘린더 버튼 클릭시 캘린더 보여주기
+    calendarButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        calenderSection.hidden = false;
+        chatSection.hidden = true;
+        userInfoForm.parentElement.hidden = true;
+    });
+
+    // 식단 버튼 클릭시 식단 보여주기
+    makeMealsButton.addEventListener('click', (e) => {
+        e.preventDefault();
+
+    });
 });
