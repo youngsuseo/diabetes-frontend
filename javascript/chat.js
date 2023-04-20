@@ -1,20 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const userInfoForm = document.querySelector('#user-info form');
     const chatForm = document.querySelector('#chat form');
-    const chatSection = document.getElementById('chat');
-    const calenderSection = document.getElementById('calender-section');
     const chatMessages = document.getElementById('chat-messages');
-    const infoSubmitButton = document.getElementById('info-submit-button');
-    const calendarButton = document.getElementById('calendar-button');
-    const makeMealsButton = document.getElementById('make-meals-button');
 
-    chatForm.addEventListener('submit', (e) => {
+    function onSpinner() {
+        document.getElementById('loader').style.display = "block";
+    }
+
+    function offSpinner() {
+        document.getElementById('loader').style.display = "none";
+    }
+
+    let userMessages = [];
+    let assistantMessages = [];
+    chatForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const userInput = document.getElementById('user-input');
         const message = document.createElement('div');
 
-        message.textContent = `User: ${userInput.value}`;
+        onSpinner();
+
+        message.textContent = `${userInput.value}`;
         chatMessages.appendChild(message);
+        userMessages.push(userInput.value);
 
         console.log(userInput.value);
 
@@ -23,10 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({"userQuery": userInput.value}),
+            body: JSON.stringify({
+                "userMessages": userMessages,
+                "assistantMessages": assistantMessages,
+            }),
         })
             .then((response) => response.json())
             .then((data) => {
+                assistantMessages.push(data);
 
                 const successMessage = document.createElement('div');
                 successMessage.className = 'success-message';
@@ -34,16 +45,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 successMessage.style.alignItems = 'right';
                 successMessage.style.color = 'white';
                 successMessage.style.background = '#2e62a7';
-                successMessage.textContent = `System: ${data}`;
+                successMessage.textContent = `${data}`;
                 chatMessages.appendChild(successMessage);
+                offSpinner();
             })
             .catch((error) => {
                 // I want to show the error message right side of the chat
                 const failMessage = document.createElement('div');
                 failMessage.style.right = '0';
                 failMessage.style.color = 'red';
-                failMessage.textContent = `System: ${error}`;
+                failMessage.textContent = `${error}`;
                 chatMessages.appendChild(failMessage);
+                offSpinner();
             });
 
         userInput.value = '';
