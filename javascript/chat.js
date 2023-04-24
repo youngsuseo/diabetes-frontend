@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log(userInput.value);
 
-        fetch('https://ta5xmpgg2e.execute-api.ap-northeast-2.amazonaws.com/prod/foods', {
+        fetch('https://jk69r0npih.execute-api.ap-northeast-2.amazonaws.com/prod/foods', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

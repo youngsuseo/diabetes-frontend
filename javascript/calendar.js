@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('addMeals').addEventListener('click', function () {
         const chatMessage = document.getElementById('chat-messages');
 
-        fetch('https://ta5xmpgg2e.execute-api.ap-northeast-2.amazonaws.com/prod/meals', {
+        fetch('https://jk69r0npih.execute-api.ap-northeast-2.amazonaws.com/prod/meals', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
