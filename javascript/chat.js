@@ -23,8 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
         chatMessages.appendChild(message);
         userMessages.push(userInput.value);
 
-        console.log(userInput.value);
-
         fetch('https://jk69r0npih.execute-api.ap-northeast-2.amazonaws.com/prod/foods', {
             method: 'POST',
             headers: {
